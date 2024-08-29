@@ -46,4 +46,22 @@ const eliminarTarea = async (req, res) => {
   }
 };
 
-export { traerTareas, recibirTareas, eliminarTarea };
+const traerTareasById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const conectado = await conexion();
+    const sql = "SELECT * FROM `tareas` WHERE id_tareas = ?";
+    const [resultado] = await conectado.query(sql, id);
+    if (resultado.length === 0) {
+      res.json({
+        mensaje: "tarea no encontradad",
+      });
+    } else {
+      res.json(resultado[0]);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { traerTareas, recibirTareas, eliminarTarea, traerTareasById };
