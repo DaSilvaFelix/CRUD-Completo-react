@@ -33,16 +33,23 @@ const recibirTareas = async (req, res) => {
 };
 
 const eliminarTarea = async (req, res) => {
-  const { id } = req.params;
-  const conectado = await conexion();
-  const sql = "SELECT * FROM `tareas` WHERE id_tareas = ?";
-  const [resultado] = await conectado.query(sql, id);
-  if (resultado.length === 0) {
-    res.json({ mensaje: "no existe la tarea para eliminarla" });
-  } else {
-    const sql2 = "DELETE FROM `tareas` WHERE id_tareas = ?";
-    await conectado.query(sql2, id);
-    res.json({ mensaje: "tarea eliminada correctamente" });
+  try {
+    const { id } = req.params;
+    const conectado = await conexion();
+    const sql = "SELECT * FROM `tareas` WHERE id_tareas = ?";
+    const [resultado] = await conectado.query(sql, id);
+    if (resultado.length === 0) {
+      res.json({ mensaje: "no existe la tarea para eliminarla" });
+    } else {
+      const sql2 = "DELETE FROM `tareas` WHERE id_tareas = ?";
+      await conectado.query(sql2, id);
+      res.json({ mensaje: "tarea eliminada correctamente" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({
+      mensaje: "error al eliminar la tarea del servidor ",
+    });
   }
 };
 
@@ -61,6 +68,9 @@ const traerTareasById = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.json({
+      mensaje: "error al traer la tarea",
+    });
   }
 };
 
