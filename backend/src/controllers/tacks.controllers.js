@@ -74,4 +74,33 @@ const traerTareasById = async (req, res) => {
   }
 };
 
-export { traerTareas, recibirTareas, eliminarTarea, traerTareasById };
+const actualizarTareas = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const {nombre,descripción,completadad} = req.body;
+    const conectado = await conexion();
+    const sql = 'SELECT * FROM `tareas`WHERE id_tareas = ?';
+    const [resultado] = await conectado.query(sql,id);
+    if (resultado.length === 0) {
+      return res.status(400).json({
+        msg:"no hay tereas para actualizar el valor"
+      })
+    } else {
+      const sql2 = 'UPDATE `tareas` SET `nombre`=?,`descripción`=?,`completadad`=? WHERE `id_tareas`=?'
+      const [resultado2] = await conectado.query(sql2,[nombre, descripción, completadad, id]);
+      if(!resultado2){
+        res.status(400).json('error en la actualizacion');
+      }else{
+        res.json({
+          msg:"tarea actualizada correctamente"
+        })
+      }
+
+    }
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
+export { traerTareas, recibirTareas, eliminarTarea, traerTareasById, actualizarTareas };
