@@ -5,5 +5,5 @@ const main = document.querySelector('#app');
 main.classList.add('2xl:min-h-full','min-h-screen')
 const index = document.createElement('div');
 index.append(divOne,divTwo)
-index.classList.add('min-h-screen','flex-row','flex');
+index.classList.add('h-screen','flex-row','flex');
 main.append(index);
