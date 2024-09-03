@@ -1,12 +1,14 @@
 import { validationResult } from "express-validator";
 
-const aplicarValidador = (req, res, next)=>{
-    const errores = validationResult(req);
+const aplicarValidador = (req, res, next) => {
+  const errores = validationResult(req);
 
-    if(errores.isEmpty){
-        return res.status(400).json(errores)
-    };
-    next();
-}
+  // Verifica si hay errores usando el método isEmpty()
+  if (!errores.isEmpty()) {
+    return res.status(400).json(errores);
+  }
 
-export { aplicarValidador }
+  next();
+};
+
+export { aplicarValidador };

@@ -15,14 +15,14 @@ const traerTareas = async (req, res) => {
 };
 
 const recibirTareas = async (req, res) => {
-  const { nombre, descripción, completadad } = req.body;
+  const { nombre, descripcion, completada } = req.body;
   const conectado = await conexion();
   const sql =
     "INSERT INTO `tareas`(`nombre`, `descripción`, `completadad`) VALUES (?,?,?)";
   const [resultado] = await conectado.query(sql, [
     nombre,
-    descripción,
-    completadad,
+    descripcion,
+    completada,
   ]);
   const mensaje = !resultado
     ? "la tarea no se creo correctamente"
@@ -76,31 +76,41 @@ const traerTareasById = async (req, res) => {
 
 const actualizarTareas = async (req, res) => {
   try {
-    const {id} = req.params;
-    const {nombre,descripción,completadad} = req.body;
+    const { id } = req.params;
+    const { nombre, descripcion, completada } = req.body;
     const conectado = await conexion();
-    const sql = 'SELECT * FROM `tareas`WHERE id_tareas = ?';
-    const [resultado] = await conectado.query(sql,id);
+    const sql = "SELECT * FROM `tareas`WHERE id_tareas = ?";
+    const [resultado] = await conectado.query(sql, id);
     if (resultado.length === 0) {
       return res.status(400).json({
-        msg:"no hay tereas para actualizar el valor"
-      })
+        msg: "no hay tereas para actualizar el valor",
+      });
     } else {
-      const sql2 = 'UPDATE `tareas` SET `nombre`=?,`descripción`=?,`completadad`=? WHERE `id_tareas`=?'
-      const [resultado2] = await conectado.query(sql2,[nombre, descripción, completadad, id]);
-      if(!resultado2){
-        res.status(400).json('error en la actualizacion');
-      }else{
+      const sql2 =
+        "UPDATE `tareas` SET `nombre`=?,`descripción`=?,`completadad`=? WHERE `id_tareas`=?";
+      const [resultado2] = await conectado.query(sql2, [
+        nombre,
+        descripcion,
+        completada,
+        id,
+      ]);
+      if (!resultado2) {
+        res.status(400).json("error en la actualizacion");
+      } else {
         res.json({
-          msg:"tarea actualizada correctamente"
-        })
+          msg: "tarea actualizada correctamente",
+        });
       }
-
     }
   } catch (error) {
     console.log(error);
-    
   }
-}
+};
 
-export { traerTareas, recibirTareas, eliminarTarea, traerTareasById, actualizarTareas };
+export {
+  traerTareas,
+  recibirTareas,
+  eliminarTarea,
+  traerTareasById,
+  actualizarTareas,
+};
